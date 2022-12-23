@@ -67,8 +67,6 @@ export const CssPropsTable: React.FC<CssPropsTableRowProps> = ({
     [customPropertiesJSON]
   );
 
-  console.log(123, rows, initialArgs, argsKeys);
-
   const [prevProps, setPrevProps] = React.useState(customPropertiesJSON);
   const [mergedArgs, setMergedArgs] = React.useState(
     mergeCustomPropertiesWithStorage(initialArgs)
