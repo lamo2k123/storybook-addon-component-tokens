@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FullExtractResult } from "custom-property-extract/dist/types";
+import { FullCustomPropertyValue } from 'custom-property-extract/dist/types';
 import {
   components,
   ArgsTable,
@@ -18,7 +18,13 @@ import { useInjectStyle } from "./InjectStyle";
 const ResetWrapper = components.resetwrapper;
 
 interface CssPropsTableRowProps {
-  customProperties: FullExtractResult;
+  customProperties: {
+    [key: string]: Array<FullCustomPropertyValue & {
+      category?: string,
+      description?: string,
+      defaultValue?: string
+    }>;
+  };
   inAddonPanel?: boolean;
 }
 
@@ -39,12 +45,12 @@ export const CssPropsTable: React.FC<CssPropsTableRowProps> = ({
             prev.argsKeys.push(argKey);
             prev.rows[argKey] = {
               control: { type: isValidColor(item.value) ? "color" : "text" },
-              defaultValue: item.value,
+              defaultValue: { summary: item.defaultValue || item.value },
               name: `${key}${item.media ? ` @ ${item.media}` : ""}`,
               table: {
-                category: item.selector,
+                category: item.category,
               },
-              description: item.name,
+              description: item.description,
               key: argKey,
               type: { name: "string" },
             };
@@ -60,6 +66,8 @@ export const CssPropsTable: React.FC<CssPropsTableRowProps> = ({
       ),
     [customPropertiesJSON]
   );
+
+  console.log(123, rows, initialArgs, argsKeys);
 
   const [prevProps, setPrevProps] = React.useState(customPropertiesJSON);
   const [mergedArgs, setMergedArgs] = React.useState(
@@ -92,7 +100,7 @@ export const CssPropsTable: React.FC<CssPropsTableRowProps> = ({
       {argsKeys.length ? (
         <ArgsTable
           inAddonPanel={inAddonPanel}
-          compact={true}
+          compact={false}
           updateArgs={updateArgs}
           resetArgs={resetArgs}
           rows={rows}
