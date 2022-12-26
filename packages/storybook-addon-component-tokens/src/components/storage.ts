@@ -1,5 +1,4 @@
 import { ADDON_ID } from "../constants";
-import { Args } from "./utils";
 
 const getSessionStorage = (key: string): Record<string, string | never> => {
   if (window.sessionStorage) {
@@ -39,9 +38,9 @@ const setSessionStorage = (
   }
 };
 
-export const updateStorage = (cssProps: Args) => {
+export const updateStorage = (cssProps: Record<string, string>) => {
   const propertiesFromStorage = getSessionStorage(ADDON_ID);
-  const newProperties = {} as Args;
+  const newProperties = {} as Record<string, string>;
   Object.keys(cssProps).forEach((key) => {
     newProperties[key] = cssProps[key];
   });
@@ -64,6 +63,6 @@ export const resetStorage = (cssPropNames?: string[]) => {
 };
 
 export const mergeCustomPropertiesWithStorage = (
-  fromParams: Args = {},
+  fromParams: Record<string, string> = {},
   fromStorage = getSessionStorage(ADDON_ID)
 ) => ({ ...fromParams, ...fromStorage });
